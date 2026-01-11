@@ -28,6 +28,10 @@ async function loadPdfJs(): Promise<any> {
 export async function convertPdfToImage(
     file: File
 ): Promise<PdfConversionResult> {
+    if (typeof window === 'undefined' || !typeof document) {
+        return { imageUrl: '', file: null, error: 'Cannot convert PDF on server' };
+    }
+
     try {
         const lib = await loadPdfJs();
 
@@ -86,6 +90,8 @@ export async function convertPdfToImage(
 
 
 export async function extractTextFromPdf(file: File): Promise<string> {
+    if (typeof window === 'undefined') return "";
+
     try {
         const lib = await loadPdfJs();
         const arrayBuffer = await file.arrayBuffer();
